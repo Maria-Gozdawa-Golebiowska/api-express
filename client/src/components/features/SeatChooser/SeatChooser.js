@@ -4,14 +4,26 @@ import { Button, Progress, Alert } from 'reactstrap';
 import { getSeats, loadSeatsRequest, getRequests } from '../../../redux/seatsRedux';
 import './SeatChooser.scss';
 
-const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
+const SeatChooser = ({ chosenDay, chosenSeat, updateSeat, reservationComplete }) => {
   const dispatch = useDispatch();
   const seats = useSelector(getSeats);
   const requests = useSelector(getRequests);
   
   useEffect(() => {
     dispatch(loadSeatsRequest());
-  }, [dispatch])
+
+    const intervalId = setInterval(() => {
+      dispatch(loadSeatsRequest());
+    }, 120000);
+
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (reservationComplete) {
+      dispatch(loadSeatsRequest());
+    }
+  }, [dispatch, reservationComplete]);
 
   const isTaken = (seatId) => {
     return (seats.some(item => (item.seat === seatId && item.day === chosenDay)));
