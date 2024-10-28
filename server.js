@@ -44,9 +44,8 @@ app.use((req, res) => {
   res.status(404).json({ message: '404 Not found' });
 });
 
-mongoose.connect("mongodb://0.0.0.0:27017/NewWaveDB", {
-  useNewUrlParser: true,
-});
+mongoose.connect("mongodb+srv://mgozdawa:IWt4XP4V8tRSidIJ@cluster0.ao19p.mongodb.net/NewWave?retryWrites=true&w=majority&appName=Cluster0", {});
+
 const db = mongoose.connection;
 db.once("open", () => {
   console.log("Connected to database");
